@@ -13,15 +13,15 @@ class Game():
         self.gold = gold
         self.streak = 0
         self.level_max = 9
-        self.list_bench = [None]*8
+        self.list_bench = [None]*9
+        self.list_board = [None]*level
         self.state = Decimal(state)
         self.list_champion = self.create_champion_by_cost()
         self.rolling_chances = self.create_rolling_chances()
         self.pool_champion_size = self.create_pool_size()
         self.pool_champion = self.create_pool_champion()
         self.shop_list = [None]*5
-        self.exp_size = self.create_exp_size()
-        
+        self.exp_size = self.create_exp_size()       
     
     """
     Tạo danh sách các tướng theo giá tiền kèm tộc hệ
@@ -29,69 +29,69 @@ class Game():
     def create_champion_by_cost(self):
         list_cham = {1:[], 2:[], 3:[], 4:[], 5:[]}
 
-        list_cham[1].append(Champion("Cassiopeia", {"Noxus":True,"Shurima":True,"Invoker":True}))
-        list_cham[1].append(Champion("Chogath", {"Void":True, "Bruiser":True}))
-        list_cham[1].append(Champion("Irelia", {"Ionia":True, "Challenger":True}))
-        list_cham[1].append(Champion("Jhin", {"Ionia":True, "Deadeye":True}))
-        list_cham[1].append(Champion("Kayle", {"Demacia":True, "Slayer":True}))
-        list_cham[1].append(Champion("Malzahar", {"Void":True, "Sorcerer":True}))
-        list_cham[1].append(Champion("Maokai", {"Shadow Isles":True, "Bastion":True}))
-        list_cham[1].append(Champion("Orianna", {"Piltover":True, "Sorcerer":True}))
-        list_cham[1].append(Champion("Poppy", {"Demacia":True, "Bastion":True, "Yordle":True}))
-        list_cham[1].append(Champion("Renekton", {"Shurima":True, "Bruiser":True}))
-        list_cham[1].append(Champion("Samira", {"Noxus":True, "Challenger":True}))
-        list_cham[1].append(Champion("Tristana", {"Yordle":True, "Gunner":True}))
-        list_cham[1].append(Champion("Viego", {"Shadow Isles":True, "Rogue":True}))
+        list_cham[1].append(Champion("Cassiopeia", {"Noxus":True,"Shurima":True,"Invoker":True}, 1))
+        list_cham[1].append(Champion("Chogath", {"Void":True, "Bruiser":True}, 1))
+        list_cham[1].append(Champion("Irelia", {"Ionia":True, "Challenger":True}, 1))
+        list_cham[1].append(Champion("Jhin", {"Ionia":True, "Deadeye":True}, 1))
+        list_cham[1].append(Champion("Kayle", {"Demacia":True, "Slayer":True}, 1))
+        list_cham[1].append(Champion("Malzahar", {"Void":True, "Sorcerer":True}, 1))
+        list_cham[1].append(Champion("Maokai", {"Shadow Isles":True, "Bastion":True}, 1))
+        list_cham[1].append(Champion("Orianna", {"Piltover":True, "Sorcerer":True}, 1))
+        list_cham[1].append(Champion("Poppy", {"Demacia":True, "Bastion":True, "Yordle":True}, 1))
+        list_cham[1].append(Champion("Renekton", {"Shurima":True, "Bruiser":True}, 1))
+        list_cham[1].append(Champion("Samira", {"Noxus":True, "Challenger":True}, 1))
+        list_cham[1].append(Champion("Tristana", {"Yordle":True, "Gunner":True}, 1))
+        list_cham[1].append(Champion("Viego", {"Shadow Isles":True, "Rogue":True}, 1))
 
-        list_cham[2].append(Champion("Ashe", {"Freljord":True, "Deadeye":True}))
-        list_cham[2].append(Champion("Galio", {"Demacia":True, "Invoker":True}))
-        list_cham[2].append(Champion("Jinx", {"Zaun":True, "Gunner":True}))
-        list_cham[2].append(Champion("Kassadin", {"Void":True, "Bastion":True}))
-        list_cham[2].append(Champion("Kled", {"Noxus":True, "Yordle":True, "Slayer":True}))
-        list_cham[2].append(Champion("Sett", {"Ionia":True, "Juggernaut":True}))
-        list_cham[2].append(Champion("Soraka", {"Targon":True, "Invoker":True}))
-        list_cham[2].append(Champion("Swain", {"Noxus":True, "Sorcerer":True, "Strategist":True}))
-        list_cham[2].append(Champion("Taliyah", {"Shurima":True, "Multicaster":True}))
-        list_cham[2].append(Champion("Teemo", {"Strategist":True, "Multicaster":True, "Yordle":True}))
-        list_cham[2].append(Champion("Vi", {"Piltover":True, "Bruiser":True}))
-        list_cham[2].append(Champion("Warwick", {"Zaun":True, "Challenger":True, "Juggernaut":True}))
-        list_cham[2].append(Champion("Zed", {"Ionia":True, "Rogue":True, "Slayer":True}))
+        list_cham[2].append(Champion("Ashe", {"Freljord":True, "Deadeye":True}, 2))
+        list_cham[2].append(Champion("Galio", {"Demacia":True, "Invoker":True}, 2))
+        list_cham[2].append(Champion("Jinx", {"Zaun":True, "Gunner":True}, 2))
+        list_cham[2].append(Champion("Kassadin", {"Void":True, "Bastion":True}, 2))
+        list_cham[2].append(Champion("Kled", {"Noxus":True, "Yordle":True, "Slayer":True}, 2))
+        list_cham[2].append(Champion("Sett", {"Ionia":True, "Juggernaut":True}, 2))
+        list_cham[2].append(Champion("Soraka", {"Targon":True, "Invoker":True}, 2))
+        list_cham[2].append(Champion("Swain", {"Noxus":True, "Sorcerer":True, "Strategist":True}, 2))
+        list_cham[2].append(Champion("Taliyah", {"Shurima":True, "Multicaster":True}, 2))
+        list_cham[2].append(Champion("Teemo", {"Strategist":True, "Multicaster":True, "Yordle":True}, 2))
+        list_cham[2].append(Champion("Vi", {"Piltover":True, "Bruiser":True}, 2))
+        list_cham[2].append(Champion("Warwick", {"Zaun":True, "Challenger":True, "Juggernaut":True}, 2))
+        list_cham[2].append(Champion("Zed", {"Ionia":True, "Rogue":True, "Slayer":True}, 2))
 
-        list_cham[3].append(Champion("Akshan", {"Shurima":True, "Deadeye":True}))
-        list_cham[3].append(Champion("Darius", {"Noxus":True, "Juggernaut":True}))
-        list_cham[3].append(Champion("Ekko", {"Zaun":True, "Piltover":True, "Rogue":True}))
-        list_cham[3].append(Champion("Garen", {"Demacia":True, "Juggernaut":True}))
-        list_cham[3].append(Champion("Jayce", {"Piltover":True, "Gunner":True}))
-        list_cham[3].append(Champion("Kalista", {"Shadow Isles":True, "Challenger":True}))
-        list_cham[3].append(Champion("Karma", {"Ionia":True, "Invoker":True}))
-        list_cham[3].append(Champion("Katarina", {"Noxus":True, "Rogue":True}))
-        list_cham[3].append(Champion("Lissandra", {"Freljord":True, "Invoker":True}))
-        list_cham[3].append(Champion("RekSai", {"Void":True, "Bruiser":True}))
-        list_cham[3].append(Champion("Sona", {"Demacia":True, "Multicaster":True}))
-        list_cham[3].append(Champion("Taric", {"Targon":True, "Sorcerer":True, "Bastion":True}))
-        list_cham[3].append(Champion("Velkoz", {"Void":True, "Multicaster":True, "Sorcerer":True}))
+        list_cham[3].append(Champion("Akshan", {"Shurima":True, "Deadeye":True}, 3))
+        list_cham[3].append(Champion("Darius", {"Noxus":True, "Juggernaut":True}, 3))
+        list_cham[3].append(Champion("Ekko", {"Zaun":True, "Piltover":True, "Rogue":True}, 3))
+        list_cham[3].append(Champion("Garen", {"Demacia":True, "Juggernaut":True}, 3))
+        list_cham[3].append(Champion("Jayce", {"Piltover":True, "Gunner":True}, 3))
+        list_cham[3].append(Champion("Kalista", {"Shadow Isles":True, "Challenger":True}, 3))
+        list_cham[3].append(Champion("Karma", {"Ionia":True, "Invoker":True}, 3))
+        list_cham[3].append(Champion("Katarina", {"Noxus":True, "Rogue":True}, 3))
+        list_cham[3].append(Champion("Lissandra", {"Freljord":True, "Invoker":True}, 3))
+        list_cham[3].append(Champion("RekSai", {"Void":True, "Bruiser":True}, 3))
+        list_cham[3].append(Champion("Sona", {"Demacia":True, "Multicaster":True}, 3))
+        list_cham[3].append(Champion("Taric", {"Targon":True, "Sorcerer":True, "Bastion":True}, 3))
+        list_cham[3].append(Champion("Velkoz", {"Void":True, "Multicaster":True, "Sorcerer":True}, 3))
 
-        list_cham[4].append(Champion("Aphelios", {"Targon":True, "Deadeye":True}))
-        list_cham[4].append(Champion("Azir", {"Shurima":True, "Strategist":True}))
-        list_cham[4].append(Champion("Gwen", {"Shadow Isles":True, "Slayer":True}))
-        list_cham[4].append(Champion("Jarvan IV", {"Demacia":True, "Strategist":True}))
-        list_cham[4].append(Champion("Kaisa", {"Void":True, "Challenger":True}))
-        list_cham[4].append(Champion("Lux", {"Demacia":True, "Sorcerer":True}))
-        list_cham[4].append(Champion("Nasus", {"Shurima":True, "Juggernaut":True}))
-        list_cham[4].append(Champion("Sejuani", {"Freljord":True, "Bruiser":True}))
-        list_cham[4].append(Champion("Shen", {"Ionia":True, "Bastion":True, "Invoker":True}))
-        list_cham[4].append(Champion("Urgot", {"Zaun":True, "Deadeye":True}))
-        list_cham[4].append(Champion("Yasuo", {"Ionia":True, "Challenger":True}))
-        list_cham[4].append(Champion("Zeri", {"Zaun":True, "Gunner":True}))
+        list_cham[4].append(Champion("Aphelios", {"Targon":True, "Deadeye":True}, 4))
+        list_cham[4].append(Champion("Azir", {"Shurima":True, "Strategist":True}, 4))
+        list_cham[4].append(Champion("Gwen", {"Shadow Isles":True, "Slayer":True}, 4))
+        list_cham[4].append(Champion("Jarvan IV", {"Demacia":True, "Strategist":True}, 4))
+        list_cham[4].append(Champion("Kaisa", {"Void":True, "Challenger":True}, 4))
+        list_cham[4].append(Champion("Lux", {"Demacia":True, "Sorcerer":True}, 4))
+        list_cham[4].append(Champion("Nasus", {"Shurima":True, "Juggernaut":True}, 4))
+        list_cham[4].append(Champion("Sejuani", {"Freljord":True, "Bruiser":True}, 4))
+        list_cham[4].append(Champion("Shen", {"Ionia":True, "Bastion":True, "Invoker":True}, 4))
+        list_cham[4].append(Champion("Urgot", {"Zaun":True, "Deadeye":True}, 4))
+        list_cham[4].append(Champion("Yasuo", {"Ionia":True, "Challenger":True}, 4))
+        list_cham[4].append(Champion("Zeri", {"Zaun":True, "Gunner":True}, 4))
 
-        list_cham[5].append(Champion("Aatrox", {"Darkin":True, "Juggernaut":True, "Slayer":True}))
-        list_cham[5].append(Champion("Ahri", {"Ionia":True, "Sorcerer":True}))
-        list_cham[5].append(Champion("Belveth", {"Void":True, "Empress":True}))
-        list_cham[5].append(Champion("Heimerdinger", {"Piltover":True, "Technogenius":True, "Yordle":True}))
-        list_cham[5].append(Champion("KSante", {"Shurima":True, "Bastion":True}))
-        list_cham[5].append(Champion("Ryze", {"Wanderer":True, "Invoker":True}))
-        list_cham[5].append(Champion("Senna", {"Shadow Isles":True, "Redeemer":True, "Gunner":True}))
-        list_cham[5].append(Champion("Sion", {"Noxus":True, "Bruiser":True}))
+        list_cham[5].append(Champion("Aatrox", {"Darkin":True, "Juggernaut":True, "Slayer":True}, 5))
+        list_cham[5].append(Champion("Ahri", {"Ionia":True, "Sorcerer":True}, 5))
+        list_cham[5].append(Champion("Belveth", {"Void":True, "Empress":True}, 5))
+        list_cham[5].append(Champion("Heimerdinger", {"Piltover":True, "Technogenius":True, "Yordle":True}, 5))
+        list_cham[5].append(Champion("KSante", {"Shurima":True, "Bastion":True}, 5))
+        list_cham[5].append(Champion("Ryze", {"Wanderer":True, "Invoker":True}, 5))
+        list_cham[5].append(Champion("Senna", {"Shadow Isles":True, "Redeemer":True, "Gunner":True}, 5))
+        list_cham[5].append(Champion("Sion", {"Noxus":True, "Bruiser":True}, 5))
 
         return list_cham
 
@@ -163,6 +163,12 @@ class Game():
             print(*[str(temp) for temp in pro.values()])
 
     """
+    In ra số lượng tướng còn lại trong bể
+    """
+    def print_pool_size(self):
+        print(*[len(self.pool_champion[cost]) for cost in range(1,6)])
+
+    """
     Kiểm tra xem bể tướng còn tướng không
     Nếu có thì chỉnh lại trong số tỷ lệ về 0
     """
@@ -173,12 +179,12 @@ class Game():
         return level_chances
 
     """
-    Tướng trong shop
+    Đổi lại tướng trong shop
     """
     def shop_refresh(self):
         for pos_shop in range(5):
             if self.shop_list[pos_shop] != None:
-                self.pool_champion[self.shop_list[pos_shop][1]].append(self.shop_list[pos_shop][0])
+                self.pool_champion[self.shop_list[pos_shop].cost].append(self.shop_list[pos_shop])
 
         shop_list = []
         for box in range(5):
@@ -187,7 +193,7 @@ class Game():
                                           weights=level_chances,k=1)[0]
             cham = random.choice(self.pool_champion[random_value])
             self.pool_champion[random_value].remove(cham)
-            shop_list.append((cham, random_value))
+            shop_list.append(cham)
 
         self.shop_list = shop_list
 
@@ -239,6 +245,7 @@ class Game():
             if self.exp >= self.exp_size[self.level]:
                 self.exp -= self.exp_size[self.level]
                 self.level += 1
+                self.list_board.append(None)
             
     """
     Mua tướng trong shop lên hàng chờ
@@ -247,16 +254,16 @@ class Game():
         if self.list_bench.count(None) == 0:
             print("hàng chờ đã full")
         else:
-            for pos in range(8):
+            for pos in range(9):
                 if self.list_bench[pos] == None:
                     self.list_bench[pos] = self.shop_list[pos_shop]
                     self.shop_list[pos_shop] = None
                     break
 
     """
-    Bán tướng trong shop lên hàng chờ
+    Bán tướng trong hàng chờ
     """
-    def sell_champion(self, pos_bench):
+    def sell_champion_bench(self, pos_bench):
         if self.list_bench.count(None) == 9:
             print("Hàng chờ không có tướng")
         elif self.list_bench[pos_bench] == None:
@@ -265,13 +272,51 @@ class Game():
             self.pool_champion[self.list_bench[pos_bench][1]].append(self.list_bench[pos_bench][0])
             self.list_bench[pos_bench] = None
 
+    """
+    Bán tướng trên sàn
+    """
+    def sell_champion_board(self, pos_board):
+        if self.list_board.count(None) == 9:
+            print("Hàng chờ không có tướng")
+        elif self.list_board[pos_board] == None:
+            print("Vị trí không có tướng để bán")
+        else:
+            self.pool_champion[self.list_board[pos_board][1]].append(self.list_board[pos_board][0])
+            self.list_board[pos_board] = None
+
+    """
+    Chuyển từ hàng chờ sang sàn đấu
+    """
+    def bench_to_board(self, pos_bech):
+        if self.list_board.count(None) == 0:
+            print("Sàn đấu đã dầy")
+        else:
+            for pos in range(len(self.list_board)):
+                if self.list_board[pos] == None:
+                    self.list_board[pos] = self.list_bench[pos_bech]
+                    self.list_bench[pos_bech] = None
+                    break
+
+    """
+    Ấn nút roll tướng mất vàng
+    """
+    def roll(self):
+        if self.gold < 2:
+            print("Không đủ tiền roll")
+        else:
+            self.shop_refresh()
+            self.gold -= 2
+
 
 game = Game(level=6,exp=10,gold=200,state=Decimal(2.1))
-for i in range(10):
+for i in range(200):
+    game.buy_exp()
     game.shop_refresh()
-    print(*[obj.name if obj !=None else None for obj in [obj2[0] if obj2 !=None else None for obj2 in game.shop_list]])
+    # print(*[obj.name if obj !=None else None for obj in  game.shop_list])
     game.buy_champion(0)
-    print(*[obj.name if obj !=None else None for obj in [obj2[0] if obj2 !=None else None for obj2 in game.shop_list]])
-    print(*[obj.name if obj !=None else None for obj in [obj2[0] if obj2 !=None else None for obj2 in game.list_bench]])
+    game.bench_to_board(0)
+    # print(*[obj.name if obj !=None else None for obj in  game.shop_list])
+    # print(*[obj.name if obj !=None else None for obj in  game.list_bench])
+    # if len(game.list_board)
 
-a = [None]*8
+game.print_pool_size()
