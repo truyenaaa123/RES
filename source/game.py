@@ -50,18 +50,19 @@ class Game():
         self.gold += self.streak_bonus()
         self.gold += 5
 
-game = Game(level=6,exp=10,gold=200,state=Decimal(2.1))
-for i in range(10):
-    game.player.buy_exp()
-    game.shop.shop_refresh(game.player.level)
-    # print(*[obj.name if obj !=None else None for obj in  game.shop_list])
-    game.player.buy_champion(game.shop, 0)
-    game.player.bench_to_board(0)
-    # print(*[obj.name if obj !=None else None for obj in  game.shop_list])
-    # print(*[obj.name if obj !=None else None for obj in  game.list_bench])
-    # if len(game.list_board)
+if __name__ == "__main__":
+    game = Game(level=6,exp=10,gold=200,state=Decimal(2.1))
+    for i in range(10):
+        game.player.buy_exp()
+        game.shop.shop_refresh(game.player.level)
+        # print(*[obj.name if obj !=None else None for obj in  game.shop_list])
+        game.player.buy_champion(game.shop, 0)
+        game.player.bench_to_board(0)
+        # print(*[obj.name if obj !=None else None for obj in  game.shop_list])
+        # print(*[obj.name if obj !=None else None for obj in  game.list_bench])
+        # if len(game.list_board)
 
-list_name_cham = lambda list: [o.name if o != None else None for o in list]
-game.shop.print_pool_size()
-print(list_name_cham(game.player.list_bench))
-print(list_name_cham(game.player.list_board))
+    list_name_cham = lambda list: [o.name if o != None else None for o in list]
+    game.shop.print_pool_size()
+    print(list_name_cham(game.player.list_bench))
+    print(list_name_cham(game.player.list_board))

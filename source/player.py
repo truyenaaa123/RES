@@ -1,5 +1,6 @@
 from champion import *
 from shop import *
+import time
 import random
 import math
 from decimal import Decimal, ROUND_DOWN
@@ -14,9 +15,12 @@ class Player():
         self.gold = gold
         self.streak = 0
         self.level_max = 9
-        self.list_bench = [None]*9
-        self.list_board = [None]*level
+        self.num_bench = 9
+        self.num_board = level
+        self.list_cham = [None]*(9+self.num_board)
+        self.is_full_cham = False
         self.database = Database()
+        self.list_3stars = []
 
     """
     Mua kinh nghiệm bằng tiền
@@ -32,66 +36,105 @@ class Player():
             if self.exp >= self.database.exp_size[self.level]:
                 self.exp -= self.database.exp_size[self.level]
                 self.level += 1
-                self.list_board.append(None)
+                self.list_cham.append(None)
+
+    """
+    Mua, kiểm tra và thay thế nếu tướng đó có thể lên 2 sao hoặc 3 sao
+    """
+    def buy_upgrade_cham(self, shop: Shop, pos_shop):
+        cham = shop.shop_list[pos_shop].copy()
+        list_same_cham = [idx for idx, value in enumerate(self.list_cham) if hasattr(value, 'name') and (cham.name == value.name and cham.star == value.star == 1)]
+        list_same_cham_shop = [idx for idx, value in enumerate(shop.shop_list) if hasattr(value, 'name') and (cham.name == value.name and cham.star == value.star == 1)]
+        print(list_same_cham)
+        print(list_same_cham_shop)
+        if len(list_same_cham + list_same_cham_shop) >= 3:  
+            # Nâng sao khi hàng chờ full  
+            if self.is_full_cham and len(list_same_cham > 0):
+                self.list_cham[list_same_cham[-1]] = None
+                self.list_cham[list_same_cham[0]] = cham
+                self.list_cham[list_same_cham[0]].star = 2
+                self.gold -= (3-len(list_same_cham)) * shop.shop_list[pos_shop].cost
+                for idx_shop in list_same_cham_shop[:3-len(list_same_cham)]:
+                    shop.shop_list[idx_shop] = None
+
+            elif self.is_full_cham and len(list_same_cham) == 0:
+                print("hàng chờ đã full")
+
+            # up tướng trên hàng chờ chưa full
+            elif len(list_same_cham) == 2:
+                self.list_cham[list_same_cham[1]] = None
+                self.gold -= shop.shop_list[pos_shop].cost
+                shop.shop_list[pos_shop] = None
+                self.list_cham[list_same_cham[0]].star = 2
+            
+            # Mua tướng khi hàng chờ chưa full
+            elif not(self.is_full_cham) and len(list_same_cham) < 2:
+                self.gold -= shop.shop_list[pos_shop].cost
+                self.list_cham[self.list_cham.index(None)] = cham
+                shop.shop_list[pos_shop] = None
+                
+        # Mua tướng lên hàng chớ với hàng chờ chưa full
+        elif not(self.is_full_cham) and len(list_same_cham) < 2:
+            self.gold -= shop.shop_list[pos_shop].cost
+            self.list_cham[self.list_cham.index(None)] = cham
+            shop.shop_list[pos_shop] = None
+            
+        elif self.is_full_cham and len(list_same_cham) < 2:
+            print("hàng chờ đã full")
+
+        list_same_cham = [idx for idx, value in enumerate(self.list_cham) if hasattr(value, 'name') and (cham.name == value.name and value.star == 2)]
+        print(list_same_cham)
+        if len(list_same_cham) == 3:  
+            self.list_cham[list_same_cham[0]].star = 3
+            self.list_cham[list_same_cham[1]] = None
+            self.list_cham[list_same_cham[2]] = None
+            self.list_3stars.append(cham.copy())
+
             
     """
-    Mua tướng trong shop lên hàng chờ
+    Chọn tướng trong shop và mua lên hàng chờ
     """
-    def buy_champion(self, shop: Shop, pos_shop):
-        if self.list_bench.count(None) == 0:
-            print("hàng chờ đã full")
+    def pick_champion(self, shop: Shop, pos_shop):
+        if shop.shop_list[pos_shop].cost > self.gold:
+            print("Không đủ tiền để mua tướng")
+        elif self.is_full_cham:
+            if shop.shop_list[pos_shop].cost*2 > self.gold:
+                print("Không đủ tiền để mua tướng")
+            else:
+                self.buy_upgrade_cham(shop, pos_shop)
         elif shop.shop_list[pos_shop] == None:
             print("Vị trí không có tướng để mua")
-        else:
-            for pos in range(9):
-                if self.list_bench[pos] == None:
-                    if shop.shop_list[pos_shop].cost <= self.gold:
-                        self.list_bench[pos] = shop.shop_list[pos_shop]
-                        self.gold -= shop.shop_list[pos_shop].cost
-                        shop.shop_list[pos_shop] = None
-                        break
-                    else:
-                        print("Không đủ tiền để mua tướng")
-                        break
+        else: self.buy_upgrade_cham(shop, pos_shop)
 
     """
-    Bán tướng trong hàng chờ
+    Bán tướng trong hàng chờ tùy thuộc vào sao tướng
     """
-    def sell_champion_bench(self, shop: Shop,  pos_bench):
-        if self.list_bench.count(None) == 9:
-            print("Hàng chờ không có tướng")
-        elif self.list_bench[pos_bench] == None:
+    def sell_champion(self, shop: Shop,  pos_bench):
+        if self.list_cham[pos_bench] == None:
             print("Vị trí không có tướng để bán")
         else:
-            shop.pool_champion[self.list_bench[pos_bench].cost].append(self.list_bench[pos_bench])
-            self.list_bench[pos_bench] = None
-
-    """
-    Bán tướng trên sàn
-    """
-    def sell_champion_board(self, shop: Shop, pos_board):
-        if self.list_board.count(None) == 9:
-            print("Hàng chờ không có tướng")
-        elif self.list_board[pos_board] == None:
-            print("Vị trí không có tướng để bán")
-        else:
-            shop.pool_champion[self.list_board[pos_board].cost].append(self.list_board[pos_board])
-            self.list_board[pos_board] = None
-
-    """
-    Chuyển từ hàng chờ sang sàn đấu
-    """
-    def bench_to_board(self, pos_bech):
-        if self.list_board.count(None) == 0:
-            print("Sàn đấu đã dầy")
-        elif self.list_bench[pos_bech] == None:
-            print("Không có tướng tại vị trí hàng chờ này")
-        else:
-            for pos in range(len(self.list_board)):
-                if self.list_board[pos] == None:
-                    self.list_board[pos] = self.list_bench[pos_bech]
-                    self.list_bench[pos_bech] = None
-                    break
+            if self.list_cham[pos_bench].star == 3:
+                for key, value in enumerate(self.list_3stars):
+                    if value.name == self.list_cham[pos_bench].name:
+                        self.list_3stars.remove(self.list_3stars[key])
+                        break
+                temp_cham = self.list_cham[pos_bench].copy()
+                self.gold += temp_cham.cost * 9
+                temp_cham.star = 1
+                shop.pool_champion[self.list_cham[pos_bench].cost] += [cham.copy() for cham in [temp_cham]*9]
+                self.list_cham[pos_bench] = None
+            elif self.list_cham[pos_bench].star == 2:
+                temp_cham = self.list_cham[pos_bench].copy()
+                self.gold += temp_cham.cost * 3
+                temp_cham.star = 1
+                shop.pool_champion[self.list_cham[pos_bench].cost] += [cham.copy() for cham in [temp_cham]*3]
+                self.list_cham[pos_bench] = None
+            elif self.list_cham[pos_bench].star == 1:
+                temp_cham = self.list_cham[pos_bench].copy()
+                self.gold += temp_cham.cost
+                temp_cham.star = 1
+                shop.pool_champion[self.list_cham[pos_bench].cost] += [temp_cham]
+                self.list_cham[pos_bench] = None
 
     """
     Ấn nút roll tướng mất vàng
@@ -100,15 +143,37 @@ class Player():
         if self.gold < 2:
             print("Không đủ tiền roll")
         else:
-            shop.shop_refresh(self.level)
+            shop.shop_refresh(self.level, self.list_3stars)
             self.gold -= 2
 
 if __name__ == "__main__":
     list_name_cham = lambda list: [o.name if o != None else None for o in list]
-    player = Player(level= 6, exp=0, gold= 100)
+    list_star_cham = lambda list: [o.star if o != None else None for o in list]
+    player = Player(level= 6, exp=0, gold= 1000)
     shop = Shop()
-    shop.shop_refresh(player.level)
-    # Test mua exp
+    shop.shop_refresh(1, player.list_3stars)
+    while True:
+        print('Gold:', player.gold)
+        print(*list_name_cham(player.list_cham))
+        print(*list_star_cham(player.list_cham))
+        print(*list_name_cham(shop.shop_list))
+        print(*list_name_cham(player.list_3stars))
+        shop.print_pool_size()
+        select = int(input("Nhập 1 là roll, 2 là chọn vị trí mua tướng, 3 là chọn vị trí bán tướng: "))
+        if select == 1:
+            shop.shop_refresh(1, player.list_3stars)
+            continue
+        elif select == 2:
+            pos_shop = int(input("Nhập vị trí tướng cần mua trong cửa hàng: "))
+            player.pick_champion(shop, pos_shop)
+        elif select == 3:
+            pos_bench = int(input("Nhập vị trí tướng cần bán trong cửa hàng: "))
+            player.sell_champion(shop, pos_bench)
+
+
+    
+
+"""    # Test mua exp
     player.buy_exp()
     print('exp: ', player.exp)
     print('gold: ', player.gold)
@@ -138,4 +203,4 @@ if __name__ == "__main__":
     print(*list_name_cham(player.list_bench))
     print(*list_name_cham(player.list_board))
     shop.print_pool_size()
-    print(*list_name_cham(shop.shop_list))
+    print(*list_name_cham(shop.shop_list))"""

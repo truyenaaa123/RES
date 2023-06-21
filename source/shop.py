@@ -21,7 +21,7 @@ class Shop():
         pool_cham = {1:[],2:[],3:[],4:[],5:[]}
         for cost in self.database.list_champion.keys():
             for cham in self.database.list_champion[cost]:
-                pool_cham[cost] += [cham] * self.database.pool_champion_size[cost]
+                pool_cham[cost] +=  [Champion(cham.name, cham.traits, cham.cost) for _ in range(self.database.pool_champion_size[cost])]
         return pool_cham
     
     """
@@ -37,18 +37,28 @@ class Shop():
     """
     Đổi lại tướng trong shop
     """
-    def shop_refresh(self, level):
+    def shop_refresh(self, level, list_3star):
+        pool_champion = {}
         for pos_shop in range(5):
             if self.shop_list[pos_shop] != None:
                 self.pool_champion[self.shop_list[pos_shop].cost].append(self.shop_list[pos_shop])
 
+        if len(list_3star) != 0:
+            for cost in range(1,6):
+                pool_champion[cost] = [cham for cham in self.pool_champion[cost] if cham.name not in [cham3star.name for cham3star in list_3star]]
+        else:
+            pool_champion = self.pool_champion
+
         shop_list = []
         for box in range(5):
             level_chances = self.check_out_of_champion(list(self.database.rolling_chances[level].values()))
-            random_value = random.choices(list(self.pool_champion.keys()),
+            random_value = random.choices(list(pool_champion.keys()),
                                           weights=level_chances,k=1)[0]
-            cham = random.choice(self.pool_champion[random_value])
+            cham = random.choice(pool_champion[random_value])
+            print(cham, cham.name, cham.star)
             self.pool_champion[random_value].remove(cham)
+            if len(list_3star) != 0:
+                pool_champion[random_value].remove(cham)
             shop_list.append(cham)
 
         self.shop_list = shop_list
