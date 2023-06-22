@@ -28,8 +28,8 @@ class Shop():
     Kiểm tra xem bể tướng còn tướng không
     Nếu có thì chỉnh lại trong số tỷ lệ về 0
     """
-    def check_out_of_champion(self, level_chances):
-        for idx, pool_cost in self.pool_champion.items():
+    def check_out_of_champion(self, level_chances, pool_champion):
+        for idx, pool_cost in pool_champion.items():
             if len(pool_cost) <= 0:
                 level_chances[idx-1] = 0
         return level_chances
@@ -51,11 +51,10 @@ class Shop():
 
         shop_list = []
         for box in range(5):
-            level_chances = self.check_out_of_champion(list(self.database.rolling_chances[level].values()))
+            level_chances = self.check_out_of_champion(list(self.database.rolling_chances[level].values()), pool_champion)
             random_value = random.choices(list(pool_champion.keys()),
                                           weights=level_chances,k=1)[0]
             cham = random.choice(pool_champion[random_value])
-            print(cham, cham.name, cham.star)
             self.pool_champion[random_value].remove(cham)
             if len(list_3star) != 0:
                 pool_champion[random_value].remove(cham)
