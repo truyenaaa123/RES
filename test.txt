@@ -1,0 +1,41 @@
+list_cham["5"].append(Champion("Aatrox", {"":True, "":True}))
+list_cham["5"].append(Champion("Ahri", {"":True, "":True}))
+list_cham["5"].append(Champion("Belveth", {"":True, "":True}))
+list_cham["5"].append(Champion("Heimerdinger", {"":True, "":True}))
+list_cham["5"].append(Champion("KSante", {"":True, "":True}))
+list_cham["5"].append(Champion("Ryze", {"":True, "":True}))
+list_cham["5"].append(Champion("Senna", {"":True, "":True}))
+list_cham["5"].append(Champion("Sion", {"":True, "":True}))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

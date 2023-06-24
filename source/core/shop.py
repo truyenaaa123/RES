@@ -1,6 +1,7 @@
-from champion import *
+from source.core.champion import *
 import random
-from database import *
+from source.core.database import *
+
 
 class Shop():
     """

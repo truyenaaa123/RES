@@ -1,6 +1,8 @@
-from champion import *
-from shop import *
-from player import *
+from source.core.champion import *
+from source.core.shop import *
+from source.core.player import *
+from tqdm import tqdm
+import time
 import random
 import math
 from decimal import Decimal, ROUND_DOWN
@@ -25,14 +27,13 @@ class Statistical(Player):
     # Strategy mua tướng ở cost cụ thể ngẩu nhiên lên 2,3 sao
     def any4gold2star(self, shop:Shop):
         for cham_idx, cham in enumerate(shop.shop_list):
-            if cham!= None and cham.cost == 1:
+            if cham!= None and cham.name in ["Teemo", "Poppy", "Taliyah", "Kled", "Maokai", "Viego"]:
                 num_none_shop = shop.shop_list.count(None)
                 # Kiểm tra xem tướng 3 sao để không mua thêm nữa
                 if cham.name in self.sort_cham_dict and self.sort_cham_dict[cham.name] == 9:
                     pass
                 else: 
                     self.pick_champion(shop, cham_idx)
-
                     # Mua mà không cần bán (hàn chờ còn trống)
                     if num_none_shop < shop.shop_list.count(None):
                         self.buy_add_to_cham_dict(shop, cham, shop.shop_list.count(None) - num_none_shop)
@@ -45,8 +46,9 @@ class Statistical(Player):
                         # Kiểm tra xem đây có phải là cham duy nhất mà nhỏ nhất
                         if cham.name == min_num_cham[0] and list(self.sort_cham_dict.values()).count(min_num_cham[1]) == 1:
                             pass
+                        # Không phải vừa ít nhất vừa duy nhất
                         else:
-                            # Cham cần bán
+                            # Cham cần bán (Là cham sl ít nhất nhương không phải cham pos_shop)
                             sell_cham = list(self.sort_cham_dict.keys())[-1]
                             if sell_cham == cham.name:
                                 sell_cham = list(self.sort_cham_dict.keys())[-2]
@@ -56,16 +58,17 @@ class Statistical(Player):
                                 for pos_bench, cham_bench in enumerate(self.list_cham):
                                     if cham_bench.name == sell_cham:
                                         self.sell_champion(shop, pos_bench)
-                                        self.pick_champion(shop, cham_idx)
-                                        self.buy_add_to_cham_dict(shop,cham, 1)
+                                        # self.pick_champion(shop, cham_idx)
+                                        # self.buy_add_to_cham_dict(shop,cham, 1)
                                         break
                             elif min_num_cham[1] == 4 or min_num_cham[1] == 5 or min_num_cham[1] == 7:
                                 for pos_bench, cham_bench in enumerate(self.list_cham):
                                     if cham_bench.name == sell_cham and cham_bench.star == 1:
                                         self.sell_champion(shop, pos_bench)
-                                        self.pick_champion(shop, cham_idx)
-                                        self.buy_add_to_cham_dict(shop,cham, 1)
                                         break
+                            
+                            self.pick_champion(shop, cham_idx)
+                            self.buy_add_to_cham_dict(shop,cham, 1)
                             # Bán xong thì cần trừ ngược vào danh sách hoặc xóa khỏi danh sách khi sl về 0
                             if min_num_cham[1]%3 == 0:
                                 self.sort_cham_dict[sell_cham] -=3
@@ -73,10 +76,11 @@ class Statistical(Player):
                             if self.sort_cham_dict[sell_cham] == 0:
                                 del self.sort_cham_dict[sell_cham]
 
+                    # sort lại cho danh sách để dễ truy cập
                     sort_cham_list = sorted(self.sort_cham_dict.items(), key=lambda x: x[1], reverse=True)
                     self.sort_cham_dict = dict(sort_cham_list)
 
-            if list_star_cham(self.list_cham).count(2) + list_star_cham(self.list_cham).count(3) == 5:
+            if list_star_cham(self.list_cham).count(3) == 3:
                 # print(*list_star_cham(self.list_cham))
                 # for cham in self.list_cham:
                 #     if cham != None and cham.star == 2:
@@ -86,7 +90,6 @@ class Statistical(Player):
         return True
 
     def printUI(self, shop:Shop):
-        print(self.is_full_cham)
         print("Hàng chờ")
         print(*list_name_cham(self.list_cham))
         print(*list_star_cham(self.list_cham))
@@ -94,7 +97,6 @@ class Statistical(Player):
         print("Cửa hàng")
         print(*list_name_cham(shop.shop_list))
         print()
-        print(self.sort_cham_dict)
 
             
 if __name__ == "__main__":
@@ -102,6 +104,9 @@ if __name__ == "__main__":
     total = 0
     loop = 10000
     gold = 0
+    progress_bar = tqdm(total=loop, ncols=80)
+
+
 
     for i in range(loop):
         shop = Shop()
@@ -114,7 +119,12 @@ if __name__ == "__main__":
             # print(*list_name_cham(shop.shop_list))
         gold += (1000- statistical.gold)
         total += count
-
+        # print(*list_name_cham(statistical.list_cham))
+        # print(*list_star_cham(statistical.list_cham))
+        # input()
+        # time.sleep(0.1)
+        progress_bar.update(1)
+    progress_bar.close()
     print(total/loop)
     print(gold/loop)
 

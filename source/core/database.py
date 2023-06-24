@@ -1,4 +1,4 @@
-from champion import *
+from source.core.champion import *
 import random
 import math
 from decimal import Decimal, ROUND_DOWN
@@ -69,7 +69,7 @@ class Database():
         list_cham[4].append(Champion("Aphelios", {"Targon":True, "Deadeye":True}, 4))
         list_cham[4].append(Champion("Azir", {"Shurima":True, "Strategist":True}, 4))
         list_cham[4].append(Champion("Gwen", {"Shadow Isles":True, "Slayer":True}, 4))
-        list_cham[4].append(Champion("Jarvan IV", {"Demacia":True, "Strategist":True}, 4))
+        list_cham[4].append(Champion("Jarvaniv", {"Demacia":True, "Strategist":True}, 4))
         list_cham[4].append(Champion("Kaisa", {"Void":True, "Challenger":True}, 4))
         list_cham[4].append(Champion("Lux", {"Demacia":True, "Sorcerer":True}, 4))
         list_cham[4].append(Champion("Nasus", {"Shurima":True, "Juggernaut":True}, 4))
