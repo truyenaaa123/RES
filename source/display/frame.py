@@ -17,10 +17,12 @@ class Frame():
         self.money_bar = import_image_sheet("texture/hud.png", SIZE_MONEY_BAR, NO_COLOR_KEY, POS_CUT_MONEY_BAR)
 
     def update(self):
-        self.display_surface.blit(self.bg, (0,0))
         self.display_surface.blit(self.shop, ((SCREEN_WIDTH-1371)//2,SCREEN_HEIGHT-184))
         self.display_surface.blit(self.money_bar, ((SCREEN_WIDTH - 190)//2,SCREEN_HEIGHT-184-47))
         self.display_surface.blit(self.exp_bar, ((SCREEN_WIDTH-1371)//2 +1,SCREEN_HEIGHT-184 -45))
         self.display_surface.blit(self.unlock, ((SCREEN_WIDTH+1371)//2 -88,SCREEN_HEIGHT-184 -38))
+    
+    def draw_background(self):
+        self.display_surface.blit(self.bg, (0,0))
     
     

@@ -20,7 +20,6 @@ class ChampionSurface():
     def __init__(self):
         self.list_cham_surf = {}
         self.create_list_cham_surf()
-        print(len(self.list_cham_surf))
 
     def create_list_cham_surf(self):
         database = Database()
@@ -29,7 +28,7 @@ class ChampionSurface():
                 self.list_cham_surf[cham.name] = import_image_sheet("texture/champion/"+cham.name+".png", (207, 120), NO_COLOR_KEY, (0,0), size_cut=(256,128))
 
 
-class ChampionFrame():
+class ChampionShopFrame():
     def __init__(self, name_cham, cost, cost_frame:CostFrame, list_cham_surf:ChampionSurface):
         self.name_cham = name_cham
         self.cost = cost
@@ -43,5 +42,22 @@ class ChampionFrame():
         self.cham_frame_surf = pygame.Surface((215, 161)).convert_alpha() 
         self.cham_frame_surf.blit(cham, rect_cham)
         self.cham_frame_surf.blit(self.cost_frame.cost[self.cost], (0,0))
+
+class ChampionBenchFrame():
+    def __init__(self, name_cham, star, list_cham_surf:ChampionSurface):
+        self.name_cham = name_cham
+        self.star = star
+        self.list_cham_surf = list_cham_surf.list_cham_surf
+        self.create_cham_bench_frame()
+    
+    def create_cham_bench_frame(self):
+        radius = 50
+        width, height = radius * 2, radius * 2
+        circle_surface = pygame.Surface((width, height), pygame.SRCALPHA)
+        pygame.draw.circle(circle_surface, (255, 255, 255), (radius, radius), radius)
+        self.cham_bench_surf = pygame.Surface((width, height), pygame.SRCALPHA)
+        self.cham_bench_surf.blit(circle_surface, (0, 0), special_flags=pygame.BLEND_RGBA_MAX)
+        self.cham_bench_surf.blit(self.list_cham_surf[self.name_cham], (-90, 0), special_flags=pygame.BLEND_RGBA_MIN)
+        self.cham_bench_surf = pygame.transform.scale(self.cham_bench_surf, (70,70))
 
     

@@ -61,7 +61,7 @@ class Database():
         list_cham[3].append(Champion("Karma", {"Ionia":True, "Invoker":True}, 3))
         list_cham[3].append(Champion("Katarina", {"Noxus":True, "Rogue":True}, 3))
         list_cham[3].append(Champion("Lissandra", {"Freljord":True, "Invoker":True}, 3))
-        list_cham[3].append(Champion("RekSai", {"Void":True, "Bruiser":True}, 3))
+        list_cham[3].append(Champion("Reksai", {"Void":True, "Bruiser":True}, 3))
         list_cham[3].append(Champion("Sona", {"Demacia":True, "Multicaster":True}, 3))
         list_cham[3].append(Champion("Taric", {"Targon":True, "Sorcerer":True, "Bastion":True}, 3))
         list_cham[3].append(Champion("Velkoz", {"Void":True, "Multicaster":True, "Sorcerer":True}, 3))
